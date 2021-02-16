@@ -36,7 +36,7 @@ public class DishAdapter extends RecyclerView.Adapter<DishAdapter.ViewHolder> {
 
     @Override
     public int getItemCount() {
-        return 0;
+        return dishes.size();
     }
 
 
