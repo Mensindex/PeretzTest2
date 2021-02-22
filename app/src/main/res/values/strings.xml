@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Peretz test2</string>
+    <string name="textOfPreviousScreen">Предыдущий экран</string>
+    <string name="textSearchScreen">Экран поиска</string>
 </resources>

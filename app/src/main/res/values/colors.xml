@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name= "colorPrimary">#181818</color>
+    <color name= "titleColor">#181818</color>
     <color name="purple_200">#FFBB86FC</color>
     <color name="purple_500">#FF6200EE</color>
     <color name="purple_700">#FF3700B3</color>
@@ -10,4 +12,5 @@
     <color name="PeretzBlack">#101010</color>
     <color name="PeretzGrey">#686868</color>
     <color name="PeretzBackground">#0A0A0A</color>
+    <color name="peretzToolBar">#181818</color>
 </resources>

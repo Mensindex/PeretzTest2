@@ -42,7 +42,7 @@ public class DishAdapter extends RecyclerView.Adapter<DishAdapter.ViewHolder> {
     public static class ViewHolder extends RecyclerView.ViewHolder {
         final ImageView imageView, imageViewPlus, imageViewMinus;
         final TextView nameView, descriptionView, priceView;
-        final ImageView imageViewNew;
+        ImageView imageViewNew;
 
         ViewHolder(View view) {
             super(view);
@@ -60,6 +60,7 @@ public class DishAdapter extends RecyclerView.Adapter<DishAdapter.ViewHolder> {
             Glide.with(itemView.getContext())
                     .load(dish.getImage())
                     .into(imageView);
+
 
             nameView.setText(dish.getName());
             descriptionView.setText(dish.getDescription());
