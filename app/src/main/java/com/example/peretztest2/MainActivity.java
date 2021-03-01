@@ -12,6 +12,11 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.Toast;
+
+import com.example.peretztest2.mvp.global.MvpView;
+import com.example.peretztest2.mvp.listdish.ListPresenter;
+import com.example.peretztest2.mvp.listdish.ListView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,14 +25,15 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements ListView {
 
     private List<Dish> dishes = new ArrayList<>();
-    private static final String key = "47be9031474183ea92958d5e255d888e47bdad44afd5d7b7201d0eb572be5278";
     private RecyclerView recyclerView;
     private Toolbar toolbar;
     private static SharedPreferences sPref;
     private final String SAVED_ID = "SavedID";
+
+    private ListPresenter presenter = new ListPresenter();
 
 
     @Override
@@ -42,20 +48,14 @@ public class MainActivity extends AppCompatActivity {
 
         //Создал кнопки Назад и Поиск и накинул на них переходы
         ImageView leftIcon = findViewById(R.id.icoBackArrow);
-        leftIcon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(MainActivity.this, PreviousScreenActivity.class);
-                startActivity(i);
-            }
+        leftIcon.setOnClickListener(v -> {
+            Intent i = new Intent(MainActivity.this, PreviousScreenActivity.class);
+            startActivity(i);
         });
         ImageView rightIcon = findViewById(R.id.icoSearch);
-        rightIcon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent y = new Intent(MainActivity.this, SearchScreenActivity.class);
-                startActivity(y);
-            }
+        rightIcon.setOnClickListener(v -> {
+            Intent y = new Intent(MainActivity.this, SearchScreenActivity.class);
+            startActivity(y);
         });
 
         //Разделитель Item's от Камиля
@@ -63,51 +63,27 @@ public class MainActivity extends AppCompatActivity {
         itemDecoration.setDrawable(ContextCompat.getDrawable(this, R.drawable.divider));
         recyclerView.addItemDecoration(itemDecoration);
 
-        loadId();
-        if (loadId() == null) {
-            getDishes("93");
-        } else {
-            getDishes(loadId());
-        }
+        presenter.getListDishes();
 
     }
-
-    private String loadId() {
-        sPref = getPreferences(MODE_PRIVATE);
-        return sPref.getString(SAVED_ID, "");
-    }
-
-    private void saveId() {
-        sPref = getPreferences(MODE_PRIVATE);
-        SharedPreferences.Editor ed = sPref.edit();
-        ed.putString(SAVED_ID, "93");
-        ed.apply();
-    }
-
-    private void getDishes(String id) {
-        MyApplication.getApiService()
-                .getProducts(id, key)
-                .enqueue(new Callback<List<Dish>>() {
-
-                    @Override
-                    public void onResponse(Call<List<Dish>> call, Response<List<Dish>> response) {
-                        dishes = response.body();
-                        recyclerView.setAdapter(new DishAdapter(dishes));
-
-                    }
-
-                    @Override
-                    public void onFailure(Call<List<Dish>> call, Throwable t) {
-                        Log.e("TAG", "" + t);
-                    }
-                });
-
-    }
-
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        saveId();
+    public void showProgress() {
+
+    }
+
+    @Override
+    public void hideProgress() {
+
+    }
+
+    @Override
+    public void setDishesList(List listDishes) {
+        recyclerView.setAdapter(new DishAdapter(listDishes, MainActivity.this));
+    }
+
+    @Override
+    public void showMessage(String message) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 }

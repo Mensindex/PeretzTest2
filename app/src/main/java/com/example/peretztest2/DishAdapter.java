@@ -1,5 +1,8 @@
 package com.example.peretztest2;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,11 +16,17 @@ import com.bumptech.glide.Glide;
 
 import java.util.List;
 
+import static android.content.Context.MODE_PRIVATE;
+
 public class DishAdapter extends RecyclerView.Adapter<DishAdapter.ViewHolder> {
     private final List<Dish> dishes;
+    private Context contex;
+    private static SharedPreferences sPref;
+    private int countProduct = 0;
 
-    public DishAdapter(List<Dish> dishes) {
+    public DishAdapter(List<Dish> dishes, Context context) {
         this.dishes = dishes;
+        this.contex = context;
     }
 
 
@@ -39,9 +48,9 @@ public class DishAdapter extends RecyclerView.Adapter<DishAdapter.ViewHolder> {
     }
 
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder {
         final ImageView imageView, imageViewPlus, imageViewMinus;
-        final TextView nameView, descriptionView, priceView;
+        final TextView nameView, descriptionView, priceView, textViewNumber;
         ImageView imageViewNew;
 
         ViewHolder(View view) {
@@ -53,9 +62,12 @@ public class DishAdapter extends RecyclerView.Adapter<DishAdapter.ViewHolder> {
             nameView = (TextView) view.findViewById(R.id.textViewName);
             descriptionView = (TextView) view.findViewById(R.id.textViewDescription);
             priceView = (TextView) view.findViewById(R.id.textViewPrice);
+            textViewNumber = (TextView) view.findViewById(R.id.textViewNumber);
         }
 
         public void bind(Dish dish) {
+
+            textViewNumber.setText(loadId(dish.getId()));
 
             Glide.with(itemView.getContext())
                     .load(dish.getImage())
@@ -66,10 +78,35 @@ public class DishAdapter extends RecyclerView.Adapter<DishAdapter.ViewHolder> {
             descriptionView.setText(dish.getDescription());
             priceView.setText(String.valueOf(dish.getPrice()));
 
+
             if (dish.isBadgeNew()) {
                 imageViewNew.setVisibility(View.VISIBLE);
             }
 
+            imageViewPlus.setOnClickListener(v -> {
+                countProduct++;
+                saveId(dish.getId(), countProduct);
+                textViewNumber.setText(String.valueOf(countProduct));
+            });
+
+            imageViewMinus.setOnClickListener(v -> {
+                countProduct--;
+                saveId(dish.getId(), countProduct);
+                textViewNumber.setText(String.valueOf(countProduct));
+            });
+
+        }
+
+        private String loadId(int id) {
+            sPref = contex.getSharedPreferences("ids", MODE_PRIVATE);
+            return sPref.getString(String.valueOf(id), "");
+        }
+
+        void saveId(int id, int count) {
+            sPref = contex.getSharedPreferences("ids", MODE_PRIVATE);
+            SharedPreferences.Editor ed = sPref.edit();
+            ed.putString(String.valueOf(id), String.valueOf(count));
+            ed.apply();
         }
 
     }

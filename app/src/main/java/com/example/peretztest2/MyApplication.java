@@ -10,7 +10,7 @@ public class MyApplication extends Application {
     private static final String BASE_URL = "https://peretz-group.ru/api/v2/";
     private static ApiService apiService;
 
-    public static ApiService getApiService() {
+    public  static ApiService getApiService() {
         return apiService;
     }
 

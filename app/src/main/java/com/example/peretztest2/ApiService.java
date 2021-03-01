@@ -8,9 +8,6 @@ import retrofit2.http.Query;
 
 public interface ApiService {
 
-    @GET("products")
-    Call<List<Dish>> getProducts(
-            @Query("category") String categoryId,
-            @Query("key") String key
-    );
+    @GET("products?category=93&key=47be9031474183ea92958d5e255d888e47bdad44afd5d7b7201d0eb572be5278")
+    Call<List<Dish>> getProducts();
 }
