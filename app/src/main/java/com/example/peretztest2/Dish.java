@@ -7,11 +7,12 @@ public class Dish {
     private String name;
     private String description;
     private int price;
-    private int id;
+    private String id;
     @SerializedName("new")
     private boolean badgeNew;
+    private int count;
 
-    public Dish(String image, String name, String description, int price, int id) {
+    public Dish(String id, String image, String name, String description, int price) {
         this.image = image;
         this.name = name;
         this.description = description;
@@ -50,10 +51,18 @@ public class Dish {
         this.price = price;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
+    }
+
+    public int getCount() {
+        return count;
+    }
+
+    public void setCount(int count) {
+        this.count = count;
     }
 }
